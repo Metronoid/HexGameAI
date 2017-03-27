@@ -37,4 +37,3 @@ std::istream &operator>>(std::istream &is, Move &m)
     return is;            
 }
 
-

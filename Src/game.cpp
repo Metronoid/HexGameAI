@@ -26,7 +26,12 @@ void Game::newGame()
     while (!moves.empty())
         moves.pop();
     board.clear(board.getSize(), firstPlayer);
-    usedPieRule = false;
+    if(usedPieRule){
+        PlayerType type = red;
+        red = blue;
+        blue = type;
+        usedPieRule = false;
+    }
 }
 
 void Game::newGame(int size, Player firstPlayer)
@@ -34,7 +39,12 @@ void Game::newGame(int size, Player firstPlayer)
     while (!moves.empty())
         moves.pop();
     board.clear(size, firstPlayer);
-    usedPieRule = false;
+    if(usedPieRule){
+        PlayerType type = red;
+        red = blue;
+        blue = type;
+        usedPieRule = false;
+    }
 }
 
 void Game::doMove(const Move &move)
@@ -49,9 +59,18 @@ void Game::doComputerMove()
 {
     using namespace std::placeholders;  // for _1, _2, _3...
 
+    //TODO: go through the list of moves and check if it is positive to use the Pie rule.
     if (isGameOver())
         throw "The game has already ended!";
-    doMove(alphaBeta(board, plies, std::bind(getMonteCarloEval, _1, _2, trials)));
+    std::pair<Move, int> result = alphaBeta(board, plies, std::bind(getMonteCarloEval, _1, _2, trials));
+    Move move = result.first;
+    //std::cout << result.second << std::endl;
+    if (pieRuleAllowed && moves.size() == 1 && !usedPieRule && result.second <= 0){
+        applyPieRule();
+        std::cout << Color(ColorValue::GREEN) << "Computer used the pie rule." << Color() << std::endl;
+    }else{
+        doMove(move);
+    }
     //doMove(alphaBeta(board, plies, getRandomEval));
 }
 
@@ -64,6 +83,7 @@ void Game::undoMove()
     if (moves.size() == 0)
         usedPieRule = false;
 }
+
 
 void Game::applyPieRule()
 {

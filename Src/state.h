@@ -29,6 +29,7 @@ public:
     bool isGameOver() const;
     std::vector<Move> getMoves() const;
     std::vector<Move> getRelevantMoves() const;
+    std::vector<Move> getAllMoves() const;
     friend std::ostream &operator<<(std::ostream &os, const State &b);
     friend class HexGraph;
 protected:

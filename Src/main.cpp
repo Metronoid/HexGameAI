@@ -115,7 +115,7 @@ void setOptions(Game &game)
     int size = game.getSize();
     Player firstPlayer = game.getFirstPlayer();
 
-    std::cout << "What size (1-40) do you want the board to be? [" << size << "]: ";
+    std::cout << "What size (2-40) do you want the board to be? [" << size << "]: ";
     std::getline(std::cin, input);
     if (std::regex_match(input, std::regex("[[:digit:]]+"))) {
         size = std::stoi(input);
