@@ -20,12 +20,10 @@ std::istream &operator>>(std::istream &is, Move &m)
     char c;
 
     c = is.get();
-    while (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
+    while (!(c >= 'a' && c <= 'z')) {
         c = is.get();
     }
-    while ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-        if (c >= 'A' && c <= 'Z') 
-            col = col * 26 + (c - 'A' + 1);
+    while (c >= 'a' && c <= 'z') {
         if (c >= 'a' && c <= 'z')
             col = col * 26 + (c - 'a' + 1);
         c = is.get();

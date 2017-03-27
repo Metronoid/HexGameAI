@@ -13,48 +13,57 @@ void setOptions(Game &game);
 
 int main()
 {
+    // Initiate game
     Game game;
+    // Welcome message
     std::cout << Color(ColorValue::GREEN) << "Welcome to HEX!" << Color() << std::endl << std::endl;
-   
+    // Display game 
     std::cout << game << std::endl;
 
-    bool halt = false;
-    while (!halt) {
+    bool run = true;
+    while (run) {
+        // Check if the current player is a Human
         if (game.getPlayerType(game.getCurrentPlayer()) == PlayerType::HUMAN || game.isGameOver()) {
             std::cout << "Enter a move or command (h for help): ";
             std::string input;
+            // Wait for input.
             std::getline(std::cin, input);
-            if (std::regex_match(input, std::regex("[A-Za-z]+[[:digit:]]+"))) {
+            std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+            // Check if input is a move
+            if (std::regex_match(input, std::regex("[a-z]+[[:digit:]]+"))) {
                 Move m;
                 std::stringstream ss(input);
                 ss >> m;
+                // Perform move based on Input
                 try {
                     game.doMove(m);
                     std::cout << game << std::endl;
                 } catch (const char *e) {
                     std::cerr << Color(ColorValue::RED) << e << Color() << std::endl;
                 }
-            } else if (std::regex_match(input, std::regex("[hopnuqHOPNUQ]"))) {
+                // Check if input is an option
+            } else if (std::regex_match(input, std::regex("[hopnuq]"))) {
                 char c;
                 std::stringstream ss(input);
                 ss >> c;
+                // Perform action based on Input
                 switch (c) {
-                    case 'h': case 'H':
+                    case 'h':
                         help(); break;
-                    case 'o': case 'O':
+                    case 'o':
                         setOptions(game); break;
-                    case 'p': case 'P':
+                    case 'p':
                         try {
                             game.applyPieRule(); break;
                         } catch (const char *e) {
                             std::cerr << Color(ColorValue::RED) << e << Color() << std::endl;
                         }
                         break; 
-                    case 'n': case 'N':
+                    case 'n':
                         game.newGame(); 
                         std::cout << game << std::endl;
                         break;
-                    case 'u': case 'U':
+                    case 'u':
                         if (game.canUndo()) {
                             game.undoMove();
                             if (game.getPlayerType(game.getCurrentPlayer()) == PlayerType::COMPUTER)
@@ -63,21 +72,24 @@ int main()
                         } else
                             std::cerr << Color(ColorValue::RED) << "There are no moves to undo!" << Color() << std::endl;
                         break;
-                    case 'q': case 'Q':
-                        halt = true; break;
+                    case 'q':
+                        run = false; break;
                     default:
                         std::cerr << Color(ColorValue::RED) << "Invalid command!" << Color() << std::endl;
                 }             
             } else {
                 std::cerr << Color(ColorValue::RED) << "Invalid command!" << Color() << std::endl;
             }
+            // Check if the current player is a Computer
         } else if (game.getPlayerType(game.getCurrentPlayer()) == PlayerType::COMPUTER && !game.isGameOver()) {
             game.doComputerMove();
+            // Display current game state
             std::cout << game << std::endl;
         }
     }
+    // Goodbye message
     std::cout << Color(ColorValue::GREEN) << "Bye." << Color() << std::endl;
- 
+    // Close game
     return 0;
 }
 
@@ -107,7 +119,7 @@ void setOptions(Game &game)
     std::getline(std::cin, input);
     if (std::regex_match(input, std::regex("[[:digit:]]+"))) {
         size = std::stoi(input);
-        if (size < 1 || size > 40)
+        if (size < 2 || size > 40)
             size = game.getSize();
     }
     std::cout << "Who should go first? Red or blue? [" 

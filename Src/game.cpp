@@ -9,6 +9,7 @@
 #include "game.h"
 #include "ansi.h"
 
+// Game rules
 Game::Game(int size, PlayerType red, PlayerType blue, Player firstPlayer, 
         int trials, int plies, bool pieRuleAllowed): 
     board(size, firstPlayer), red(red), blue(blue), firstPlayer(firstPlayer), 
