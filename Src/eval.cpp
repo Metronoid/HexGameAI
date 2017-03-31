@@ -24,6 +24,7 @@ int getMonteCarloEval(const State &board, Player player, int trials)
         if (mcBoard.getWinner() == player) 
             wins++;
     }
+    //std::cout << wins - trials / 2 << std::endl;
     return wins - trials / 2;
 }
 

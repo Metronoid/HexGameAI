@@ -59,13 +59,12 @@ void Game::doComputerMove()
 {
     using namespace std::placeholders;  // for _1, _2, _3...
 
-    //TODO: go through the list of moves and check if it is positive to use the Pie rule.
     if (isGameOver())
         throw "The game has already ended!";
-    std::pair<Move, int> result = alphaBeta(board, plies, std::bind(getMonteCarloEval, _1, _2, trials));
+    std::pair<Move, int> result = UCTSearch(board, plies, std::bind(getMonteCarloEval, _1, _2, trials));
     Move move = result.first;
     //std::cout << result.second << std::endl;
-    if (pieRuleAllowed && moves.size() == 1 && !usedPieRule && result.second <= 0){
+    if (pieRuleAllowed && moves.size() == 1 && !usedPieRule && result.second <= 0 && false){
         applyPieRule();
         std::cout << Color(ColorValue::GREEN) << "Computer used the pie rule." << Color() << std::endl;
     }else{

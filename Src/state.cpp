@@ -114,18 +114,6 @@ std::vector<Move> State::getRelevantMoves() const
     return moves;
 }
 
-std::vector<Move> State::getAllMoves() const
-{
-    std::vector<Move> moves;
-    if (!isGameOver())
-        for (int r = 0; r < size; ++r)
-            for (int c = 0; c < size; ++c)
-                if (getHexagon(r,c) == Player::NONE) {
-                    moves.push_back(std::make_pair(r,c));
-                }
-    return moves;
-}
-
 std::ostream &operator<<(std::ostream &os, const Player &p)
 {
     switch (p) {
