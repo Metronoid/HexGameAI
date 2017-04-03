@@ -6,40 +6,42 @@
 
 #include <utility>
 #include <functional>
+#include <vector>
 
 #include "move.h"
 #include "state.h"
 
 class Node {
 public:
+    Node(const Node &n);
     Node(State board);
+    Node(State board,Move action);
 
-    void setChild(Node* n){child = n;}
-    Node* getChild(){return child;}
-    void setSibbling(Node* n){sibbling = n;}
-    Node* getSibbling(){return sibbling;}
-    void setBest(Node* n){bestNode = n;}
-    Node* getBest(){return bestNode;}
-    void setMove(Move m){move = m;}
-    Move getMove(){return move;}
-    void setState(State s){state = s;}
-    State getState(){return state;}
-    void setVisits(int v){visits = v;}
-    int getVisits(){return visits;}
-    void setWins(int w){wins = w;}
-    int getWins(){return wins;}
-    int getScore(){return wins/visits;};
+    void setChild(Node &n){child = &n;}
+    Node* getChild() const {return child;}
+    void setSibbling(Node &n){sibbling = &n;}
+    Node* getSibbling() const {return sibbling;}
+    void setBest(Node &n){bestNode = &n;}
+    Node* getBest() const {return bestNode;}
+    Move getMove() const {return move;}
+    State getState() const {return state;}
+    void setVisits(int v) {visits = v;}
+    int getVisits() const {return visits;}
+    void setWins(int w) {wins = w;}
+    int getWins() const {return wins;}
 
+    int getScore();
     void createChildren();
+    void updateWin(int score);
+
 protected:
     int wins = 0;
     int visits = 0;
     Node* child = nullptr;
     Node* sibbling = nullptr;
     Node* bestNode = nullptr;
-    Move move;
-    State state;
+    const State state;
+    const Move move;
 };
-
 
 #endif // NODE_H

@@ -20,8 +20,8 @@ public:
         PlayerType red = PlayerType::HUMAN, 
         PlayerType blue = PlayerType::COMPUTER, 
         Player firstPlayer = Player::RED,
-        int trials = 100,
-        int plies = 3,
+        int trials = 1,
+        int plies = 2,
         bool pieRuleAllowed = true);
     ~Game();
     void newGame();

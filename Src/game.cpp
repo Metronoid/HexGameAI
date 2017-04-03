@@ -64,7 +64,7 @@ void Game::doComputerMove()
     std::pair<Move, int> result = UCTSearch(board, plies, std::bind(getMonteCarloEval, _1, _2, trials));
     Move move = result.first;
     //std::cout << result.second << std::endl;
-    if (pieRuleAllowed && moves.size() == 1 && !usedPieRule && result.second <= 0 && false){
+    if (pieRuleAllowed && moves.size() == 1 && !usedPieRule && result.second <= 0){
         applyPieRule();
         std::cout << Color(ColorValue::GREEN) << "Computer used the pie rule." << Color() << std::endl;
     }else{

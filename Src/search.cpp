@@ -44,29 +44,37 @@ MoveEval alphaBeta(State &board, int ply, Player player, Player opponent, int al
     return best;
 }
 
-void PlaySimulation(State &board, Node n, std::function<int(State &state, Player p)> eval)
+void PlaySimulation(State &board, Node &n, std::function<int(State &state, Player p)> eval)
 {
     int randomResult = 0;
     int visits = n.getVisits();
     Node* child = n.getChild();
+
+    std::cout << "visited: " << visits << '\n';
+
     if(visits == 0){
         randomResult = eval(board, board.getPlayer());
+        //std::cout << randomResult << '\n';
     }else{
         if(child == nullptr){
             n.createChildren();
+            child = n.getChild();
         }
-
-        Node next = UCTSelect(n);
-
+        Node next(UCTSelect(n));
+        std::cout << next.getMove();
+        std::cout << '\n';
         board.doMove(next.getMove());
         PlaySimulation(board, next, eval);
+        std::cout << next.getMove();
+        std::cout << '\n';
         board.undoMove(next.getMove());
     }
 
     n.setVisits(visits+=1);
-    n.updateWin(randomresult);
-    //if (&child != nullptr)
-    //    SetBest(n);
+    n.updateWin(randomResult);
+    if (child != nullptr){
+        n.setBest(*child);
+    }
 }
 
 
@@ -84,45 +92,48 @@ MoveEval UCTSearch(const State &b, int ply, std::function<int(State &state, Play
         nSimulations++;
     }
 
-    Node* test = root.getBest();
-    std::cout << test << '\n';
-
-    //Node best = *(root.getBest());
-
     // Crashes when best is a nullptr
-    //return std::make_pair(best.getMove(),best.getScore());
+    if(root.getBest() == nullptr){
+        return std::make_pair(board.getMoves()[0],root.getScore());
+    }else{
+        Node best(*(root.getBest()));
+        return std::make_pair(best.getMove(),best.getScore());
+    }
 
 }
 
-Node UCTSelect(Node n)
+Node UCTSelect(Node &n)
 {
     // Larger values give uniform search
     // Smaller values give very selective search
-    /*const int UCTK = 1;
+    const int UCTK = 1;
 
     int bestUCT = 0;
     int winrate = 0;
     int uct = 0;
     int uctValue = 0;
 
-    Node result;
     Node* next = n.getChild();
+    Node* result = next;
     while(next != nullptr){
-        if(&next.getVisits() > 0){
-           winrate = next.getWins()/next.getVisits(); 
-           uct = UCTK*sqrt(n.getVisits()/(5*next.getVisits()));
+        int visits = (*next).getVisits();
+        if(visits > 0){
+           winrate = (*next).getWins()/visits; 
+           uct = UCTK*sqrt(visits/(5*visits));
            uctValue = winrate + uct;
         }else{
            uctValue = 10000 + rand() * 1000;
         }
-
+        
         if(uctValue > bestUCT){
             bestUCT = uctValue;
             result = next;
         }
-
-        next = next.getSibbling();
+        
+        next = (*next).getSibbling();
     }
-    return result;*/
+    
+    Node end(*result);
+    return end;
 }
 
