@@ -69,11 +69,10 @@ bool State::isGameOver() const
 std::vector<Move> State::getMoves() const
 {
     std::vector<Move> moves;
-    if (!isGameOver())
-        for (int r = 0; r < size; ++r)
-            for (int c = 0; c < size; ++c)
-                if (getHexagon(r,c) == Player::NONE)
-                    moves.push_back(std::make_pair(r,c));
+    for (int r = 0; r < size; ++r)
+        for (int c = 0; c < size; ++c)
+            if (getHexagon(r,c) == Player::NONE)
+                moves.push_back(std::make_pair(r,c));
     return moves;
 }
 
@@ -82,37 +81,36 @@ bool State::isValidHexagon(int row, int col) const
     return row >= 0 && row < size && col >= 0 && col < size; 
 }
 
-std::vector<Move> State::getRelevantMoves() const
-{
-    std::vector<Move> moves;
-    if (!isGameOver())
-        for (int r = 0; r < size; ++r)
-            for (int c = 0; c < size; ++c)
-                if (getHexagon(r,c) == Player::NONE) {
-                    int mid = static_cast<int>(size / 2);
-                    if (r == c && c == mid) 
-                        moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r,c+1) && (getHexagon(r,c+1) != Player::NONE || (r == c+1 && r == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r+1,c) && (getHexagon(r+1,c) != Player::NONE || (r+1 == c && c== mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r+1,c-1) && (getHexagon(r+1,c-1) != Player::NONE || (r+1 == c-1 && c-1 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r,c-1) && (getHexagon(r,c-1) != Player::NONE || (r == c-1 && r ==mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r-1,c) && (getHexagon(r-1,c) != Player::NONE || (r-1 == c && c == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r-1,c+1) && (getHexagon(r-1,c+1) != Player::NONE || (r-1 == c+1 && c+1 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r,c+2) && (getHexagon(r,c+2) != Player::NONE || (r == c+2 && r == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r+1,c+1) && (getHexagon(r+1,c+1) != Player::NONE || (r+1 == c+1 && c+1 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r+2,c) && (getHexagon(r+2,c) != Player::NONE || (r+2 == c && c == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r+2,c-1) && (getHexagon(r+2,c-1) != Player::NONE || (r+2 == c-1 && c-1 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r+2,c-2) && (getHexagon(r+2,c-2) != Player::NONE || (r+2 == c-2 && c-2 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r+1,c-2) && (getHexagon(r+1,c-2) != Player::NONE || (r+1 == c-2 && c-2 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r,c-2) && (getHexagon(r,c-2) != Player::NONE || (r == c-2 && r == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r-1,c-1) && (getHexagon(r-1,c-1) != Player::NONE || (r-1 == c-1 && c-1 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r-2,c) && (getHexagon(r-2,c) != Player::NONE || (r-2 == c && c == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r-2,c+1) && (getHexagon(r-2,c+1) != Player::NONE || (r-2 == c+1 && c+1 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r-2,c+2) && (getHexagon(r-2,c+2) != Player::NONE || (r-2 == c+2 && c+2 == mid))) moves.push_back(std::make_pair(r,c));
-                    else if (isValidHexagon(r-1,c+2) && (getHexagon(r-1,c+2) != Player::NONE || (r-1 == c+2 && c+2 == mid))) moves.push_back(std::make_pair(r,c));
-                }
-    return moves;
-}
+// std::vector<Move> State::getRelevantMoves() const
+// {
+//     std::vector<Move> moves;
+//         for (int r = 0; r < size; ++r)
+//             for (int c = 0; c < size; ++c)
+//                 if (getHexagon(r,c) == Player::NONE) {
+//                     int mid = static_cast<int>(size / 2);
+//                     if (r == c && c == mid) 
+//                         moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r,c+1) && (getHexagon(r,c+1) != Player::NONE || (r == c+1 && r == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r+1,c) && (getHexagon(r+1,c) != Player::NONE || (r+1 == c && c== mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r+1,c-1) && (getHexagon(r+1,c-1) != Player::NONE || (r+1 == c-1 && c-1 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r,c-1) && (getHexagon(r,c-1) != Player::NONE || (r == c-1 && r ==mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r-1,c) && (getHexagon(r-1,c) != Player::NONE || (r-1 == c && c == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r-1,c+1) && (getHexagon(r-1,c+1) != Player::NONE || (r-1 == c+1 && c+1 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r,c+2) && (getHexagon(r,c+2) != Player::NONE || (r == c+2 && r == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r+1,c+1) && (getHexagon(r+1,c+1) != Player::NONE || (r+1 == c+1 && c+1 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r+2,c) && (getHexagon(r+2,c) != Player::NONE || (r+2 == c && c == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r+2,c-1) && (getHexagon(r+2,c-1) != Player::NONE || (r+2 == c-1 && c-1 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r+2,c-2) && (getHexagon(r+2,c-2) != Player::NONE || (r+2 == c-2 && c-2 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r+1,c-2) && (getHexagon(r+1,c-2) != Player::NONE || (r+1 == c-2 && c-2 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r,c-2) && (getHexagon(r,c-2) != Player::NONE || (r == c-2 && r == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r-1,c-1) && (getHexagon(r-1,c-1) != Player::NONE || (r-1 == c-1 && c-1 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r-2,c) && (getHexagon(r-2,c) != Player::NONE || (r-2 == c && c == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r-2,c+1) && (getHexagon(r-2,c+1) != Player::NONE || (r-2 == c+1 && c+1 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r-2,c+2) && (getHexagon(r-2,c+2) != Player::NONE || (r-2 == c+2 && c+2 == mid))) moves.push_back(std::make_pair(r,c));
+//                     else if (isValidHexagon(r-1,c+2) && (getHexagon(r-1,c+2) != Player::NONE || (r-1 == c+2 && c+2 == mid))) moves.push_back(std::make_pair(r,c));
+//                 }
+//     return moves;
+// }
 
 std::ostream &operator<<(std::ostream &os, const Player &p)
 {

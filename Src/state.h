@@ -24,6 +24,7 @@ public:
     bool isValidHexagon(int row, int col) const; 
     Player getHexagon(int row, int col) const { return hexagons[row * size + col]; }
     Player getPlayer() const { return currentPlayer; }
+    void setPlayer(Player p) { currentPlayer = p; }
     Player getOpponent() const { return (currentPlayer == Player::RED ? Player::BLUE : Player::RED); }
     Player getWinner() const;
     bool isGameOver() const;

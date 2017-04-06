@@ -16,12 +16,12 @@ enum class PlayerType { HUMAN, COMPUTER };
 
 class Game {
 public:
-    Game(int size = 2, 
+    Game(int size = 4, 
         PlayerType red = PlayerType::HUMAN, 
         PlayerType blue = PlayerType::COMPUTER, 
         Player firstPlayer = Player::RED,
         int trials = 1,
-        int plies = 2,
+        int plies = 10000,
         bool pieRuleAllowed = true);
     ~Game();
     void newGame();

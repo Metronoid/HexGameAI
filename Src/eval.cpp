@@ -25,7 +25,11 @@ int getMonteCarloEval(const State &board, Player player, int trials)
             wins++;
     }
     //std::cout << wins - trials / 2 << std::endl;
-    return wins - trials / 2;
+    wins = wins - trials / 2;
+    if(wins == 0){
+        wins = -1;
+    }
+    return wins;
 }
 
 int getRandomEval(const State &board, Player)

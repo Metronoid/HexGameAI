@@ -14,34 +14,43 @@
 class Node {
 public:
     Node(const Node &n);
-    Node(State board);
-    Node(State board,Move action);
+    Node(State* board);
+    Node(State* board,Move action);
 
-    void setChild(Node &n){child = &n;}
+    void setChild(Node *n){child = n;}
     Node* getChild() const {return child;}
-    void setSibbling(Node &n){sibbling = &n;}
+    void setSibbling(Node *n){sibbling = n;}
     Node* getSibbling() const {return sibbling;}
-    void setBest(Node &n){bestNode = &n;}
+    void setBest(Node *n){bestNode = n;}
+    void setBest();
     Node* getBest() const {return bestNode;}
     Move getMove() const {return move;}
-    State getState() const {return state;}
-    void setVisits(int v) {visits = v;}
-    int getVisits() const {return visits;}
-    void setWins(int w) {wins = w;}
-    int getWins() const {return wins;}
+    State* getState() const {return state;}
+    void setVisits(double v) {visits = v;}
+    double getVisits() const {return visits;}
+    void setWins(double w) {wins = w;}
+    double getWins() const {return wins;}
+    void setOwner(Player p) {owner = p;}
+    Player getOwner() const {return owner;}
+    void setDone(bool d) {done = d;}
+    bool getDone() const {return done;}
+    
 
-    int getScore();
+    double getScore();
     void createChildren();
     void updateWin(int score);
+    void calculateDone();
 
 protected:
-    int wins = 0;
-    int visits = 0;
+    double wins = 0;
+    double visits = 0;
     Node* child = nullptr;
     Node* sibbling = nullptr;
     Node* bestNode = nullptr;
-    const State state;
+    State* state;
     const Move move;
+    Player owner;
+    bool done = false;
 };
 
 #endif // NODE_H
