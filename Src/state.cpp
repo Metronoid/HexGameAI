@@ -13,10 +13,10 @@ State::State(int size, Player firstPlayer): size(size),
     currentPlayer(firstPlayer), hexagons(size * size, Player::NONE)
 { }
 
-State::State(const State &board): size(board.size),
-    currentPlayer(board.currentPlayer)
+State::State(State* board): size(board -> size),
+    currentPlayer(board -> currentPlayer)
 {
-    hexagons = board.hexagons;
+    hexagons = board -> hexagons;
 }
 
 void State::clear(int size, Player firstPlayer)

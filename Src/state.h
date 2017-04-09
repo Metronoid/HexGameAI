@@ -16,7 +16,7 @@ enum class Player { NONE, RED, BLUE };
 class State {
 public:
     State(int size = 11, Player firstPlayer = Player::RED);
-    State(const State &board);
+    State(State* board);
     int getSize() const { return size; }
     void clear(int size = 11, Player firstPlayer = Player::RED);
     void doMove(const Move &move);

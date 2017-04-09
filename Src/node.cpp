@@ -8,22 +8,22 @@
 #include "move.h"
 #include "state.h"
 
-Node::Node(State* board, Move action): state(board),move(action){
-    owner = (*board).getPlayer();
-    (*board).doMove(action);
-    if((*board).getMoves().size() == 0){
+Node::Node(State* board, Move action): nodeState(board),move(action){
+    owner = board -> getPlayer();
+    board -> doMove(action);
+    if(board -> getMoves().size() == 0){
         done = true;
         //std::cout << (*board) << '\n';
     }
 }
 
-Node::Node(State* board): state(board),move(std::make_pair(-1,-1)){
-    owner = (*board).getPlayer();
+Node::Node(State* board): nodeState(board),move(std::make_pair(-1,-1)){
+    owner = board -> getPlayer();
 }
 
 void Node::updateWin(int score){
     if(owner == Player::BLUE){
-        if((*state).getPlayer() == Player::RED){
+        if(nodeState -> getPlayer() == Player::RED){
             if(score <= 0){
                 wins++;
             };
@@ -33,7 +33,7 @@ void Node::updateWin(int score){
             };
         }
     }else{
-        if((*state).getPlayer() == Player::RED){
+        if(nodeState -> getPlayer() == Player::RED){
             if(score >= 1){
                 wins++;
             };
@@ -45,7 +45,7 @@ void Node::updateWin(int score){
     }
 }
 
-double Node::getScore(){
+float Node::getScore(){
     if(getVisits() != 0){
         return wins / visits;
     }
@@ -56,12 +56,13 @@ void Node::setBest(){
     Node* next = getChild();
     double highestScore = -1;
     while(next != nullptr){
-        if((*next).getScore() > highestScore){
-            highestScore = (*next).getScore();
+        if(next -> getScore() > highestScore){
+            highestScore = next -> getScore();
             setBest(next);
         }
-        next = (*next).getSibbling();
+        next = next -> getSibbling();
     }  
+    delete next;
 }
 
 void Node::calculateDone(){
@@ -74,18 +75,19 @@ void Node::calculateDone(){
         next = (*next).getSibbling();
     } 
     setDone(result); 
+    delete next;
 }
 
 // Expansion
 void Node::createChildren(){
-    std::vector<Move> moves = (*state).getMoves();
+    std::vector<Move> moves = nodeState -> getMoves();
     if(moves.size() != 0){
-        setChild(new Node(new State(*state),moves.back()));
+        setChild(new Node(new State(nodeState.get()),moves.back()));
         moves.pop_back();
         Node* check = getChild();
 
         for (const Move &m: moves) {
-            (*check).setSibbling(new Node(new State(*state),m));
+            (*check).setSibbling(new Node(new State(nodeState.get()),m));
             check = (*check).getSibbling();
             //std::vector<Move> checkMoves = (*nextState).getMoves();
             //std::cout << check.getMove() << std::endl;
