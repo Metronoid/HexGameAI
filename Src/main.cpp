@@ -157,11 +157,11 @@ void setOptions(Game &game)
     if (game.getPlayerType(Player::RED) == PlayerType::COMPUTER ||
         game.getPlayerType(Player::BLUE) == PlayerType::COMPUTER) {
         int plies = game.getPlies();
-        std::cout << "How many plies (1-100000) should the computer think ahead? [" << plies << "]: ";
+        std::cout << "How many plies (2-200000) should the computer think ahead? [" << plies << "]: ";
         std::getline(std::cin, input);
         if (std::regex_match(input, std::regex("[[:digit:]]+"))) {
             plies = std::stoi(input);
-            if (plies < 1 || plies > 100000)
+            if (plies < 2 || plies > 200000)
                 plies = game.getPlies();
             game.setPlies(plies);
         }

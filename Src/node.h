@@ -18,11 +18,11 @@ public:
     Node(State* board);
     Node(State* board,Move action);
 
-    void setChild(Node* n){child = n;}
-    Node* getChild() const {return child;}
+    void setChild(Node* n){child.reset(n);}
+    Node* getChild() const {return child.get();}
     //void setSibbling(std::unique_ptr<Node>n){sibbling = std::move(n);}
-    void setSibbling(Node* n){sibbling = n;}
-    Node* getSibbling() const {return sibbling;}
+    void setSibbling(Node* n){sibbling.reset(n);}
+    Node* getSibbling() const {return sibbling.get();}
     void setBest(Node* n){bestNode = n;}
     void setBest();
     Node* getBest() const {return bestNode;}
@@ -42,14 +42,15 @@ public:
     void createChildren();
     void updateWin(int score);
     void calculateDone();
+    Node merge(Node n);
 
 
 protected:
     float wins = 0;
     float visits = 0;
-    Node* child = nullptr;
-    Node* sibbling = nullptr;
-    Node* bestNode;
+    std::unique_ptr<Node> child;
+    std::unique_ptr<Node> sibbling;
+    Node* bestNode = nullptr;
     std::unique_ptr<State> nodeState;
     const Move move;
     Player owner;

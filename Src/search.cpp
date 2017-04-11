@@ -9,41 +9,6 @@
 #include "eval.h"
 #include "node.h"
 
-
-MoveEval alphaBeta(const State &b, int ply, std::function<int(State &state, Player p)> eval)
-{
-    State board(b);
-    Player player = board.getPlayer();
-    Player opponent = board.getOpponent(); 
-
-    return alphaBeta(board, ply, player, opponent, std::numeric_limits<int>::min() + 1, std::numeric_limits<int>::max(), eval);
-}
-
-MoveEval alphaBeta(State &board, int ply, Player player, Player opponent, int alpha, int beta, std::function<int(State &state, Player p)> eval)
-{
-    if (ply == 0)
-        return std::make_pair(Move(), eval(board, player));
-
-    std::vector<Move> moves = board.getMoves();
-    if (moves.size() == 0)
-        return std::make_pair(Move(), eval(board, player));
-
-    MoveEval best = std::make_pair(Move(),alpha);
-    for (Move &move: moves) {
-        board.doMove(move);
-        MoveEval me = alphaBeta(board, ply - 1, opponent, player, -beta, -alpha, eval);
-        board.undoMove(move);
-        if (-me.second > alpha) {
-            alpha = -me.second;
-            best = std::make_pair(move,alpha);
-        }
-        //std::cout << alpha << std::endl;
-        if (alpha >= beta) 
-            return best;
-    }
-    return best;
-}
-
 void PlaySimulation(Node &n, int &rResult, std::function<int(State &state, Player p)> eval)
 {
     Node* selected = &n;
@@ -52,9 +17,13 @@ void PlaySimulation(Node &n, int &rResult, std::function<int(State &state, Playe
 
     //     //std::cout << "visited: " << visits << '\n';
             nodes.push_back(selected);
+            if n.visits > 30000{
+                
+            }
 
         if( selected -> getVisits() < 1){
             State test = *(selected -> getState());
+            //TODO: If we want to build this application for more than 1 evaluation, make it multi threaded.
             rResult = eval(test, selected -> getState() -> getPlayer());
             break;
             //std::cout << (*board).getPlayer() << '\n';
@@ -137,7 +106,6 @@ Node* UCTSelect(Node &n)
             }
         }
         next = next -> getSibbling();
-           // if((*(*next).getState()).getMoves().size() < 1){}
     }
     delete next;
     return result;

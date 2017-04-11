@@ -6,6 +6,7 @@
 #include <string>
 #include <functional>
 
+
 #include "game.h"
 #include "ansi.h"
 
@@ -61,7 +62,10 @@ void Game::doComputerMove()
 
     if (isGameOver())
         throw "The game has already ended!";
+
     std::pair<Move, int> result = UCTSearch(board, plies, std::bind(getMonteCarloEval, _1, _2, trials));
+
+
     Move move = result.first;
    // std::cout << result.second << std::endl;
     if (pieRuleAllowed && moves.size() == 1 && !usedPieRule && result.second <= 0){

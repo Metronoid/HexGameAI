@@ -1,7 +1,7 @@
 EXECUTABLE=hex
 
 CC=g++
-CFLAGS=-c -Wall -O3 -std=c++11 -g
+CFLAGS=-c -Wall -Ofast -std=c++11 -g
 LDFLAGS=-g
 
 DEPS=$(wildcard *.h)
